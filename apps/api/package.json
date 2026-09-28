@@ -7,10 +7,10 @@
   "main": "dist/src/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "prisma generate && tsc -p tsconfig.json",
+    "build": "npm run build --workspace @worknoon/shared-types && prisma generate && tsc -p tsconfig.json",
     "start": "node dist/src/server.js",
     "seed": "tsx prisma/seed.ts",
-    "typecheck": "prisma generate && tsc -p tsconfig.json --noEmit",
+    "typecheck": "npm run build --workspace @worknoon/shared-types && prisma generate && tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
