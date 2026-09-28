@@ -1,0 +1,140 @@
+// WORKNOON refund system — data model.
+// Mirrors docs/DATA_MODEL.md; money is stored as integer cents to keep the $500 policy boundary exact.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum RefundStatus {
+  PENDING
+  APPROVED
+  DENIED
+  ESCALATED
+}
+
+enum AuditActor {
+  CUSTOMER
+  SYSTEM
+  AI
+  POLICY_ENGINE
+  ADMIN
+}
+
+enum AuditEventType {
+  REQUEST_RECEIVED
+  INPUT_SCREENED
+  AI_INTERPRETATION
+  POLICY_EVALUATED
+  DECISION_MADE
+  AI_RESPONSE_GENERATED
+  AI_FALLBACK_USED
+  ERROR
+}
+
+model Customer {
+  id        String   @id
+  name      String
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+  orders    Order[]
+  refunds   RefundRequest[]
+
+  @@map("customers")
+}
+
+model Order {
+  id          String      @id
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  orderDate   DateTime
+  status      OrderStatus
+  totalCents  Int
+  items       OrderItem[]
+  refunds     RefundRequest[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([customerId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String      @id
+  orderId       String
+  order         Order       @relation(fields: [orderId], references: [id])
+  productName   String
+  quantity      Int
+  priceCents    Int
+  finalSale     Boolean     @default(false)
+  damaged       Boolean     @default(false)
+  incorrectItem Boolean     @default(false)
+  refundLinks   RefundRequestItem[]
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+model RefundRequest {
+  id                   String   @id @default(cuid())
+  displayId            Int      @unique @default(autoincrement())
+  customerId           String
+  customer             Customer @relation(fields: [customerId], references: [id])
+  orderId              String
+  order                Order    @relation(fields: [orderId], references: [id])
+  customerMessage      String
+  status               RefundStatus @default(PENDING)
+  detectedReason       String?
+  refundAmountCents    Int?
+  decisionReasonCodes  String[]
+  customerResponse     String?
+  aiInterpretation     Json?
+  policyResult         Json?
+  aiUsed               Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  items                RefundRequestItem[]
+  audit                AuditEvent[]
+
+  @@index([status, createdAt])
+  @@index([customerId])
+  @@index([orderId])
+  @@map("refund_requests")
+}
+
+model RefundRequestItem {
+  refundRequestId String
+  orderItemId     String
+  refundRequest   RefundRequest @relation(fields: [refundRequestId], references: [id], onDelete: Cascade)
+  orderItem       OrderItem     @relation(fields: [orderItemId], references: [id])
+
+  @@id([refundRequestId, orderItemId])
+  @@index([orderItemId])
+  @@map("refund_request_items")
+}
+
+model AuditEvent {
+  id              String         @id @default(cuid())
+  refundRequestId String
+  refundRequest   RefundRequest  @relation(fields: [refundRequestId], references: [id], onDelete: Cascade)
+  eventType       AuditEventType
+  actor           AuditActor
+  summary         String
+  payload         Json?
+  createdAt       DateTime       @default(now())
+
+  @@index([refundRequestId, createdAt])
+  @@map("audit_events")
+}

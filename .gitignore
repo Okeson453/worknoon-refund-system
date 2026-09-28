@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.npm/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Test and coverage artefacts
+coverage/
+.vitest/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Docker volumes and local database data
+pgdata/

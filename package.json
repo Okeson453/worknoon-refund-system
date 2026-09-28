@@ -1,0 +1,42 @@
+{
+  "name": "worknoon-refund-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WORKNOON AI-powered customer support refund system",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @worknoon/shared-types && npm run build --workspace @worknoon/api && npm run build --workspace @worknoon/web",
+    "build:shared": "npm run build --workspace @worknoon/shared-types",
+    "build:api": "npm run build --workspace @worknoon/api",
+    "build:web": "npm run build --workspace @worknoon/web",
+    "dev:api": "npm run dev --workspace @worknoon/api",
+    "dev:web": "npm run dev --workspace @worknoon/web",
+    "typecheck": "npm run typecheck --workspace @worknoon/shared-types && npm run typecheck --workspace @worknoon/api && npm run typecheck --workspace @worknoon/web",
+    "lint": "eslint .",
+    "test": "npm run build:shared && npm run test --workspace @worknoon/api",
+    "test:unit": "npm run test:unit --workspace @worknoon/api",
+    "test:integration": "npm run test:integration --workspace @worknoon/api",
+    "test:all": "bash scripts/test-all.sh",
+    "prisma:generate": "npm run prisma:generate --workspace @worknoon/api",
+    "db:migrate": "npm run prisma:deploy --workspace @worknoon/api",
+    "db:seed": "npm run seed --workspace @worknoon/api",
+    "db:studio": "npm run prisma:studio --workspace @worknoon/api",
+    "verify": "bash scripts/verify-clean-clone.sh",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down -v"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.1"
+  }
+}
