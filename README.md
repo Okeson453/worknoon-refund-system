@@ -208,6 +208,11 @@ Full specification: [policy/refund-policy.md](policy/refund-policy.md).
 
 ## 9. AI integration
 
+**The stack runs without an API key.** `AI_PROVIDER=mock` is the default, so a fresh clone decides
+correctly with no signup. Select a live model with `AI_PROVIDER=gemini` (free tier,
+`GEMINI_API_KEY`) or `AI_PROVIDER=anthropic` (`ANTHROPIC_API_KEY`); both are schema-constrained the
+same way, and swapping between them is a one-line env change.
+
 Two model calls per request, both schema-constrained with forced tool use:
 
 1. **Interpret** — sanitised message plus item id/name pairs in, structured signals out
