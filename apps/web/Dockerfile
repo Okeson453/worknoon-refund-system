@@ -21,8 +21,9 @@ FROM nginx:1.27-alpine AS runtime
 # The nginx image's entrypoint runs envsubst over /etc/nginx/templates/*.template, expanding only
 # variables that exist in the environment, and writes the result to conf.d/default.conf.
 COPY apps/web/nginx.conf /etc/nginx/templates/default.conf.template
-# Defaults to the Railway private-network hostname of a service named "api". Override with the
-# API service's own hostname (<service-name>.railway.internal) if it is named differently.
+# Defaults to the Railway private-network hostname of a service named "api". Set it to the API
+# service's real internal hostname (<service-name>.railway.internal) if it is named differently.
+# A wrong hostname now degrades /api to 502 instead of preventing boot.
 ENV API_INTERNAL_HOST=api.railway.internal
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html
 
