@@ -8,6 +8,7 @@ const redactPaths = [
   'request.headers.authorization',
   'authorization',
   'anthropicApiKey',
+  'geminiApiKey',
   'ANTHROPIC_API_KEY',
   'apiKey',
   'phone',
