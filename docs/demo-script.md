@@ -159,7 +159,9 @@ request id ties the customer's error message, the server logs and this timeline 
 
 ## 6:15 — AI integration and failure handling
 
-**Say:** "Two model calls per request, with a strict split."
+**Say:** "Two model calls per request, with a strict split. The provider here is the deterministic
+one, so the run is reproducible; swapping `AI_PROVIDER` to `gemini` or `anthropic` puts a real model
+behind the exact same interface and the exact same schemas."
 
 *Call one:* "The model sees the sanitised message, the item ids and names, and nothing else — no
 email, no order totals, no other customers. Forced tool use means it can only answer with the
@@ -202,6 +204,8 @@ Known trade-offs, stated plainly:
 * Heuristic injection detection is bypassable; the structure is what makes it safe.
 * Escalated requests are resolved outside the service; there is no override endpoint yet.
 * The dashboard polls every ten seconds rather than streaming.
+* The default provider is deterministic, not a live model — a deliberate call so the stack runs with
+  no key. `AI_PROVIDER=gemini` or `anthropic` swaps in a real model behind the same interface.
 * One API container, so the rate limiter is per process.
 
 **Say:** "Tests: 228 of them. Every policy rule, both sides of the $500 and day-30 boundaries, the
