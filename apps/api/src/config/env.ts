@@ -6,7 +6,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65_535).default(8080),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
-  AI_PROVIDER: z.enum(['anthropic', 'gemini', 'mock']).default('anthropic'),
+  // Defaults to the key-free provider so the stack boots and decides correctly with no AI key
+  // configured. `gemini` (free tier) or `anthropic` opt into a live model.
+  AI_PROVIDER: z.enum(['anthropic', 'gemini', 'mock']).default('mock'),
   ANTHROPIC_API_KEY: z.string().default(''),
   GEMINI_API_KEY: z.string().default(''),
   AI_MODEL: z.string().default(''),

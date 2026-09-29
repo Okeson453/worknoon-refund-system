@@ -10,7 +10,7 @@ policy check, the AI analysis and the audit trail in an admin dashboard.
 > engine decides, and it is pure, deterministic and fully unit-tested.
 
 - Challenge: WORKNOON Full Stack AI Integration
-- Stack: React 18 + TypeScript + Vite · Node.js 20 + Express + TypeScript · PostgreSQL 16 · Prisma · Zod · Anthropic SDK
+- Stack: React 18 + TypeScript + Vite · Node.js 20 + Express + TypeScript · PostgreSQL 16 · Prisma · Zod · Gemini / Anthropic SDKs
 - Deployment: Docker Compose (`db`, `api`, `web`)
 
 ---
@@ -35,9 +35,13 @@ Then open:
 The API container waits for PostgreSQL, applies the Prisma migration, seeds 15 synthetic
 customers and starts serving. No manual Node, PostgreSQL or Prisma installation is required.
 
-**No API key?** Set `AI_PROVIDER=mock` in `.env` and restart. The deterministic provider classifies
-with fixed keyword rules, so the whole demo runs offline and every scenario behaves identically on
-every machine.
+**No API key?** Nothing to do — `.env.example` already ships `AI_PROVIDER=mock`, so a fresh clone runs
+offline. The deterministic provider classifies with fixed keyword rules, so the whole demo runs
+without a signup and every scenario behaves identically on every machine.
+
+**Want a real model?** Set `AI_PROVIDER=gemini` and `GEMINI_API_KEY=<key>` in `.env` (free tier at
+https://aistudio.google.com/apikey). `AI_PROVIDER=anthropic` with `ANTHROPIC_API_KEY` works too.
+Either way the AI is an optional enrichment — the policy engine owns every decision.
 
 ---
 
@@ -68,7 +72,7 @@ Express API ── Zod validation · rate limit · admin auth · request id
         ▼
 Refund service (orchestration)
         ├── repositories ── PostgreSQL 16 / Prisma
-        ├── AI service ──── Anthropic (or MockProvider) → structured signals
+        ├── AI service ──── Gemini or Anthropic (or MockProvider) → structured signals
         ├── policy engine ─ pure function, no I/O  ← the only authority
         └── audit service ─ append-only event trail
         │
@@ -140,9 +144,10 @@ Vite proxies `/api` to the Express service, so the browser still talks to a sing
 |---|---|---|---|
 | `NODE_ENV` | No | `development` | Runtime mode |
 | `DATABASE_URL` | **Yes** | — | PostgreSQL connection string; validated at boot |
-| `AI_PROVIDER` | No | `anthropic` | `anthropic` or `mock` |
-| `ANTHROPIC_API_KEY` | For live AI | empty | Never logged, never sent to the browser |
-| `AI_MODEL` | No | `claude-sonnet-5` | Anthropic model id |
+| `AI_PROVIDER` | No | `mock` | `mock` (key-free, deterministic), `gemini` (free tier), or `anthropic` |
+| `GEMINI_API_KEY` | For Gemini | empty | Never logged, never sent to the browser |
+| `ANTHROPIC_API_KEY` | For Anthropic | empty | Never logged, never sent to the browser |
+| `AI_MODEL` | No | per provider | `gemini-2.5-flash` or `claude-sonnet-5`; overrides the provider default |
 | `AI_TIMEOUT_MS` | No | `10000` | Per-call timeout, with one retry |
 | `AI_MIN_CONFIDENCE` | No | `0.6` | Below this the reason counts as unclear (E5) |
 | `REFUND_WINDOW_DAYS` | No | `30` | Refund window, inclusive |

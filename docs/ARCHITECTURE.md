@@ -44,8 +44,9 @@ payment execution, email notifications, multi-tenancy and partial-quantity refun
                                                      │
                                                      ▼
                                           ┌────────────────────┐
-                                          │ Anthropic Messages │
-                                          │ API (or Mock)      │
+                                          │ Gemini (OpenAI-    │
+                                          │ compat) or Anthro- │
+                                          │ pic, or Mock       │
                                           └────────────────────┘
 ```
 
@@ -213,6 +214,7 @@ should be able to read the answer, not infer it.
 apps/api/src/ai/
 ├── ai.types.ts            AiProvider, InterpretInput, ComposeInput, Interpretation, Composition
 ├── ai.provider.ts         provider factory + health state tracking
+├── gemini.provider.ts     Gemini OpenAI-compatible endpoint, forced tool use, one retry
 ├── anthropic.provider.ts  Messages API, forced tool use, one retry, typed failures
 ├── mock.provider.ts       deterministic classifier used by tests and no-key demos
 ├── injectionScreen.ts     heuristic pattern list

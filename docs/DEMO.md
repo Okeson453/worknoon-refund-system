@@ -12,7 +12,7 @@ Everything needed to run, present and defend the system. The timed narration liv
 | Docker with Compose v2 | `docker compose version` should succeed |
 | ~2 GB free RAM | PostgreSQL plus two Node containers |
 | Ports 3000, 8080, 5432 free | Override with `WEB_PORT` / `PORT` in `.env` |
-| An Anthropic API key *(optional)* | Without it, run `AI_PROVIDER=mock` |
+| An LLM API key *(optional)* | Not needed — the default `mock` provider runs offline. Gemini's free tier or Anthropic both work |
 
 No local Node, PostgreSQL or Prisma installation is needed. The API image installs dependencies,
 generates the Prisma client, builds the TypeScript, applies the migration and seeds the data during
@@ -27,11 +27,11 @@ git clone <repository>
 cd worknoon-refund-system
 cp .env.example .env
 
-# Option A — with a real model
-echo 'ANTHROPIC_API_KEY=sk-ant-...' >> .env
+# Runs as-is: AI_PROVIDER=mock is the default, no key and no signup needed.
 
-# Option B — fully offline, deterministic
-sed -i 's/^AI_PROVIDER=anthropic/AI_PROVIDER=mock/' .env
+# Optionally, for a live model (Gemini free tier):
+#   AI_PROVIDER=gemini
+#   GEMINI_API_KEY=...
 
 docker compose up --build
 ```
@@ -186,8 +186,9 @@ The relevant case, `POST /api/refunds — AI failure on an otherwise eligible re
 provider which always throws produces `ESCALATED` with `AI_UNAVAILABLE`, `aiUsed: false`, an `ERROR`
 audit event and a template reply — never an approval.
 
-With `AI_PROVIDER=anthropic` and no key, `/api/health` reports `"ai": "disabled"` and every request
-still reaches a verdict.
+With a live provider selected but no key (`AI_PROVIDER=gemini` or `anthropic` with an empty key),
+`/api/health` reports `"ai": "disabled"` and every request still reaches a verdict. The default
+`mock` provider reports `"ai": "disabled"` too — that is expected and not a failure.
 
 ### Rate limiting
 
@@ -269,7 +270,7 @@ repeated runs are deterministic. It refuses to run against a database whose name
 | `[entrypoint] database did not become ready in time` | `DATABASE_URL` points somewhere unreachable | Check the host in `DATABASE_URL` (`db` inside Compose) |
 | `Invalid environment configuration` | A required variable is missing or malformed | The error names the exact variable; compare with `.env.example` |
 | UI shows "Cannot reach the refund service" | `api` is not up, or nginx cannot reach it | `docker compose ps`, `docker compose logs api` |
-| Everything is `ESCALATED` with `AI_UNAVAILABLE` | Provider is `anthropic` with no key | Set `AI_PROVIDER=mock` or add `ANTHROPIC_API_KEY` |
+| Everything is `ESCALATED` with `AI_UNAVAILABLE` | A live provider is selected with no key | Set `AI_PROVIDER=mock`, or add `GEMINI_API_KEY` / `ANTHROPIC_API_KEY` |
 | Dashboard shows `401` | `ADMIN_API_KEY` is set | Enter the key in the dashboard toolbar |
 | No customers in the switcher | Seed did not run | `docker compose exec api node dist/prisma/seed.js` |
 | Port already in use | Another service holds 3000/8080/5432 | Change `WEB_PORT`, `PORT` in `.env` |

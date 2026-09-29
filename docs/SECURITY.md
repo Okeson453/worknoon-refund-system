@@ -18,7 +18,7 @@ Express API  ── request id · rate limit · admin auth · Zod validation · 
         ▼
 Service layer ── ownership · sanitisation · injection screen · policy · AI
         ▼
-PostgreSQL 16    ·  Anthropic Messages API
+PostgreSQL 16    ·  Gemini / Anthropic Messages API (or Mock)
 ```
 
 | Boundary | Control |

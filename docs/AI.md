@@ -36,14 +36,16 @@ interface AiProvider {
 
 | Implementation | File | Use |
 |---|---|---|
+| `GeminiProvider` | `ai/gemini.provider.ts` | Live model, Gemini's OpenAI-compatible endpoint with forced tool use. Free tier |
 | `AnthropicProvider` | `ai/anthropic.provider.ts` | Live model, Messages API with forced tool use |
 | `MockProvider` | `ai/mock.provider.ts` | Deterministic classifier for tests and key-free demos |
 
 Selection is by environment variable, resolved once in `ai/ai.provider.ts`:
 
 ```env
-AI_PROVIDER=anthropic   # default
-AI_PROVIDER=mock        # deterministic, offline
+AI_PROVIDER=mock        # default — deterministic, offline, no key
+AI_PROVIDER=gemini      # free tier, needs GEMINI_API_KEY
+AI_PROVIDER=anthropic   # needs ANTHROPIC_API_KEY
 ```
 
 Both implementations are interchangeable behind the interface, and the refund service receives the
@@ -303,9 +305,10 @@ system safe.
 
 | Variable | Default | Effect |
 |---|---|---|
-| `AI_PROVIDER` | `anthropic` | `mock` switches to the deterministic provider |
+| `AI_PROVIDER` | `mock` | `gemini` / `anthropic` switch to a live model; `mock` is key-free |
+| `GEMINI_API_KEY` | empty | Empty means AI is disabled; the app still starts and still decides |
 | `ANTHROPIC_API_KEY` | empty | Empty means AI is disabled; the app still starts and still decides |
-| `AI_MODEL` | `claude-sonnet-5` | Model id sent to the Messages API |
+| `AI_MODEL` | per provider | `gemini-2.5-flash` / `claude-sonnet-5`; overrides the provider default |
 | `AI_TIMEOUT_MS` | `10000` | Per-call timeout |
 | `AI_MAX_RETRIES` | `1` (code constant) | Retries on 429, 5xx and timeout |
 | `AI_MIN_CONFIDENCE` | `0.6` | Below this, rule E5 fires |

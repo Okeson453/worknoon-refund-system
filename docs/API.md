@@ -72,7 +72,7 @@ Service, database and AI status. Used by the container healthcheck and by the we
   "status": "ok",
   "database": "ok",
   "ai": "enabled",
-  "aiProvider": "anthropic",
+  "aiProvider": "mock",
   "timestamp": "2026-09-28T12:00:00.000Z"
 }
 ```
@@ -82,7 +82,7 @@ Service, database and AI status. Used by the container healthcheck and by the we
 | `status` | `ok`, `degraded` | `degraded` when the database is unreachable |
 | `database` | `ok`, `down` | Result of a live `SELECT 1` |
 | `ai` | `enabled`, `disabled`, `degraded` | `disabled` for the mock provider or a missing key; `degraded` when the last call failed after the last success |
-| `aiProvider` | `anthropic`, `mock` | Which provider is configured |
+| `aiProvider` | `mock`, `gemini`, `anthropic` | Which provider is configured |
 | `timestamp` | ISO-8601 | Server time |
 
 **503 Service Unavailable** — same body with `"status": "degraded"` and `"database": "down"`.

@@ -41,7 +41,7 @@ curl -sS http://localhost:8080/api/health
 ```
 
 ```json
-{ "status": "ok", "database": "ok", "ai": "enabled", "aiProvider": "anthropic",
+{ "status": "ok", "database": "ok", "ai": "disabled", "aiProvider": "mock",
   "timestamp": "2026-09-28T12:00:00.000Z" }
 ```
 
