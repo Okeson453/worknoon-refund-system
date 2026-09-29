@@ -133,8 +133,9 @@ export class GeminiProvider implements AiProvider {
         return response;
       } catch (error) {
         lastError = toAiError(error);
+        const detail = lastError.kind === 'provider' || lastError.kind === 'invalid_output' ? `: ${lastError.message}` : '';
         logger.warn(
-          { event: 'ai.retry', provider: this.name, attempt, kind: lastError.kind, latencyMs: Date.now() - startedAt },
+          { event: 'ai.retry', provider: this.name, attempt, kind: lastError.kind, detail, latencyMs: Date.now() - startedAt },
           'ai call failed',
         );
         if (attempt === this.maxRetries || !isRetryable(lastError)) break;
