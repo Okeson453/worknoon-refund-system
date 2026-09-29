@@ -48,6 +48,12 @@ services:
       dockerfile: apps/web/Dockerfile
     container_name: worknoon-web
     restart: unless-stopped
+    environment:
+      # nginx resolves this at request time and builds the /api upstream from it. It must be the
+      # compose service name, not the image default (api.railway.internal), or every /api call
+      # 502s locally while the SPA still serves — the confusing "health endpoint unreachable on a
+      # machine where everything is clearly running" failure.
+      API_INTERNAL_HOST: api
     depends_on:
       api:
         condition: service_started

@@ -208,7 +208,7 @@ Known trade-offs, stated plainly:
   no key. `AI_PROVIDER=gemini` or `anthropic` swaps in a real model behind the same interface.
 * One API container, so the rate limiter is per process.
 
-**Say:** "Tests: 228 of them. Every policy rule, both sides of the $500 and day-30 boundaries, the
+**Say:** "Tests: 227 of them. Every policy rule, both sides of the $500 and day-30 boundaries, the
 monotonic-safety property, the injection corpus, the full 15-scenario matrix end to end, the error
 contract, the rate limit and the AI-outage path. `npm run test:all` runs typecheck, lint, both
 suites and the production builds."
@@ -245,7 +245,10 @@ it is written to be spoken in about the stated duration.
 > Three containers: a PostgreSQL 16 database whose healthcheck gates the API, a Node 20 API that
 > applies migrations and seeds fifteen synthetic customers before it starts listening, and an nginx
 > container that serves the React build and reverse-proxies the API, so the browser only ever talks
-> to one origin. The health endpoint tells me the database is up and the AI provider is enabled."
+> to one origin. The health endpoint tells me the database is up. It reports the AI provider as
+> disabled because this run is on the deterministic mock provider — no key, no signup, nothing to
+> leak or rate-limit, and every decision below is still produced by the same pipeline. Switching to
+> a live model is one environment variable, and I'll show that later."
 
 ### 0:45 — Architecture (≈60 s)
 
@@ -324,7 +327,7 @@ it is written to be spoken in about the stated duration.
 > the audit trail. The honest trade-offs: admin access is a static token rather than identity
 > management, the injection heuristics are bypassable, escalations are resolved outside the
 > service, and the dashboard polls rather than streams. The test suite is two hundred and twenty
-> eight tests covering every rule, both sides of every boundary, the full seeded matrix end to end,
+> seven tests covering every rule, both sides of every boundary, the full seeded matrix end to end,
 > the error contract, the rate limit and the AI outage path. `npm run test:all` runs typecheck, lint,
 > both suites and the production builds. Thank you — happy to take questions."
 
