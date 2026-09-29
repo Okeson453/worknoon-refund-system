@@ -30,7 +30,7 @@ Then open:
 |---|---|
 | http://localhost:3000 | Customer refund flow |
 | http://localhost:3000/admin | Support dashboard |
-| http://localhost:4000/api/health | API health (also the container healthcheck) |
+| http://localhost:8080/api/health | API health (also the container healthcheck) |
 
 The API container waits for PostgreSQL, applies the Prisma migration, seeds 15 synthetic
 customers and starts serving. No manual Node, PostgreSQL or Prisma installation is required.
@@ -126,8 +126,8 @@ npm run prisma:generate                   # generate the Prisma client
 npm run db:migrate                        # prisma migrate deploy
 npm run db:seed                           # 15 synthetic customers and orders
 
-npm run dev:api                           # http://localhost:4000
-npm run dev:web                           # http://localhost:5173 (proxies /api to :4000)
+npm run dev:api                           # http://localhost:8080
+npm run dev:web                           # http://localhost:5173 (proxies /api to :8080)
 ```
 
 Vite proxies `/api` to the Express service, so the browser still talks to a single origin.
@@ -148,7 +148,7 @@ Vite proxies `/api` to the Express service, so the browser still talks to a sing
 | `REFUND_WINDOW_DAYS` | No | `30` | Refund window, inclusive |
 | `ESCALATION_THRESHOLD_USD` | No | `500` | Human-review threshold; strictly above escalates |
 | `ADMIN_API_KEY` | No | empty | Optional bearer token for the support endpoints |
-| `PORT` | No | `4000` | API port |
+| `PORT` | No | `8080` | API port |
 | `WEB_PORT` | No | `3000` | Published web port |
 | `LOG_LEVEL` | No | `info` | pino level |
 

@@ -1,6 +1,6 @@
 # API Reference
 
-Base URL: `http://localhost:4000/api` in development, `http://localhost:3000/api` through the nginx
+Base URL: `http://localhost:8080/api` in development, `http://localhost:3000/api` through the nginx
 container (same origin as the web client).
 
 * Request and response bodies are JSON (`Content-Type: application/json`).
@@ -154,7 +154,7 @@ confidence, the injection flag, the full rule list, audit payloads and exception
 ### cURL
 
 ```bash
-curl -sS -X POST http://localhost:4000/api/refunds \
+curl -sS -X POST http://localhost:8080/api/refunds \
   -H 'Content-Type: application/json' \
   -d '{"customerId":"CUST-001","orderId":"ORD-1001","itemIds":["ITM-1001-1"],
        "message":"My headphones arrived damaged and I would like a refund."}'

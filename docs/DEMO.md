@@ -11,7 +11,7 @@ Everything needed to run, present and defend the system. The timed narration liv
 |---|---|
 | Docker with Compose v2 | `docker compose version` should succeed |
 | ~2 GB free RAM | PostgreSQL plus two Node containers |
-| Ports 3000, 4000, 5432 free | Override with `WEB_PORT` / `PORT` in `.env` |
+| Ports 3000, 8080, 5432 free | Override with `WEB_PORT` / `PORT` in `.env` |
 | An Anthropic API key *(optional)* | Without it, run `AI_PROVIDER=mock` |
 
 No local Node, PostgreSQL or Prisma installation is needed. The API image installs dependencies,
@@ -42,20 +42,20 @@ Watch for:
 [entrypoint] waiting for the database…
 [entrypoint] applying database migrations…
 [entrypoint] seeding synthetic CRM and order data…
-[entrypoint] starting the API on port 4000…
-{"event":"startup","port":4000,"msg":"api listening"}
+[entrypoint] starting the API on port 8080…
+{"event":"startup","port":8080,"msg":"api listening"}
 ```
 
 Open:
 
 * http://localhost:3000 — customer flow
 * http://localhost:3000/admin — support dashboard
-* http://localhost:4000/api/health — health JSON
+* http://localhost:8080/api/health — health JSON
 
 Verify the seed landed:
 
 ```bash
-curl -sS http://localhost:4000/api/customers | head -c 200
+curl -sS http://localhost:8080/api/customers | head -c 200
 # {"items":[{"id":"CUST-001","name":"Amara Osei","email":"customer001@example.test"}, …
 ```
 
@@ -157,7 +157,7 @@ echo 'ADMIN_API_KEY=demo-admin-key' >> .env && docker compose up -d api
 The support endpoints now answer `401`:
 
 ```bash
-curl -sS http://localhost:4000/api/refunds
+curl -sS http://localhost:8080/api/refunds
 # {"error":{"code":"UNAUTHORIZED","message":"A valid admin API key is required.","requestId":"req_…"}}
 ```
 
@@ -193,7 +193,7 @@ still reaches a verdict.
 
 ```bash
 for i in $(seq 1 21); do
-  curl -s -o /dev/null -w '%{http_code}\n' -X POST http://localhost:4000/api/refunds \
+  curl -s -o /dev/null -w '%{http_code}\n' -X POST http://localhost:8080/api/refunds \
     -H 'Content-Type: application/json' \
     -d '{"customerId":"CUST-013","orderId":"ORD-1014","itemIds":["ITM-1014-1"],"message":"refund please"}'
 done
@@ -203,7 +203,7 @@ done
 ### Ownership
 
 ```bash
-curl -sS http://localhost:4000/api/refunds \
+curl -sS http://localhost:8080/api/refunds \
   -H 'Content-Type: application/json' \
   -d '{"customerId":"CUST-002","orderId":"ORD-1001","itemIds":["ITM-1001-1"],"message":"it arrived damaged"}'
 # 404 "Customer or order not found." — identical to an unknown order
@@ -212,7 +212,7 @@ curl -sS http://localhost:4000/api/refunds \
 ### Spoofed facts are rejected
 
 ```bash
-curl -sS -X POST http://localhost:4000/api/refunds -H 'Content-Type: application/json' \
+curl -sS -X POST http://localhost:8080/api/refunds -H 'Content-Type: application/json' \
   -d '{"customerId":"CUST-002","orderId":"ORD-1002","itemIds":["ITM-1002-1"],"message":"return please","finalSale":false}'
 # 400 VALIDATION_ERROR — the strict schema rejects unknown fields
 ```
@@ -272,7 +272,7 @@ repeated runs are deterministic. It refuses to run against a database whose name
 | Everything is `ESCALATED` with `AI_UNAVAILABLE` | Provider is `anthropic` with no key | Set `AI_PROVIDER=mock` or add `ANTHROPIC_API_KEY` |
 | Dashboard shows `401` | `ADMIN_API_KEY` is set | Enter the key in the dashboard toolbar |
 | No customers in the switcher | Seed did not run | `docker compose exec api node dist/prisma/seed.js` |
-| Port already in use | Another service holds 3000/4000/5432 | Change `WEB_PORT`, `PORT` in `.env` |
+| Port already in use | Another service holds 3000/8080/5432 | Change `WEB_PORT`, `PORT` in `.env` |
 | Integration tests refuse to start | Target database name lacks `test` | Point `TEST_DATABASE_URL` at a `*_test` database |
 | Stale data after a schema change | Migration not applied | `docker compose exec api npx prisma migrate deploy` |
 

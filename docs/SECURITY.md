@@ -24,7 +24,7 @@ PostgreSQL 16    ·  Anthropic Messages API
 | Boundary | Control |
 |---|---|
 | Browser → nginx | Content-Security-Policy, `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `Permissions-Policy` |
-| nginx → API | Private network, fixed upstream `api:4000` |
+| nginx → API | Private network, fixed upstream `api:8080` |
 | API → database | Parameterised Prisma queries, credentials from environment only |
 | API → model | Sanitised text in a delimited block, no secrets, no contact data, forced output schema |
 | Model → policy | One narrow `PolicySignals` object; no authority over the verdict |

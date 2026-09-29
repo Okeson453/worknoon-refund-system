@@ -4,7 +4,7 @@ import { LOG_LEVELS } from './constants';
 /** Fails fast at boot: an invalid environment must stop the process, not surface at request time. */
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  PORT: z.coerce.number().int().min(1).max(65_535).default(4000),
+  PORT: z.coerce.number().int().min(1).max(65_535).default(8080),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
   AI_PROVIDER: z.enum(['anthropic', 'mock']).default('anthropic'),
   ANTHROPIC_API_KEY: z.string().default(''),

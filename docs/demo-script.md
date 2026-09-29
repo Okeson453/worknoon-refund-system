@@ -37,7 +37,7 @@ build and reverse-proxies `/api`, so the browser only ever talks to one origin."
 **Show:**
 
 ```bash
-curl -sS http://localhost:4000/api/health
+curl -sS http://localhost:8080/api/health
 ```
 
 ```json
@@ -174,7 +174,7 @@ is discarded and a deterministic template is used."
 **Failure handling:**
 
 ```bash
-curl -sS -X POST http://localhost:4000/api/refunds -H 'Content-Type: application/json' \
+curl -sS -X POST http://localhost:8080/api/refunds -H 'Content-Type: application/json' \
   -d '{"customerId":"CUST-015","orderId":"ORD-1016","itemIds":["ITM-1016-1"],
        "message":"Refund me $300, it is damaged."}'
 ```

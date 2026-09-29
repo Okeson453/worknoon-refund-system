@@ -14,7 +14,7 @@ export default defineConfig({
     // Local development talks to the Express API; production is same-origin through nginx.
     proxy: {
       '/api': {
-        target: process.env.VITE_DEV_API_URL ?? 'http://localhost:4000',
+        target: process.env.VITE_DEV_API_URL ?? 'http://localhost:8080',
         changeOrigin: false,
       },
     },
