@@ -12,7 +12,7 @@ if [ ! -f "$DEFAULT_CONF" ]; then
     exit 0
 fi
 
-RESOLVERS=$(awk '/^nameserver/{ printf "%s ", $2 }' /etc/resolv.conf | sed 's/ $//')
+RESOLVERS=$(awk '/^nameserver/{ r=$2; if (r ~ /:/) r="[" r "]"; printf "%s ", r }' /etc/resolv.conf | sed 's/ $//')
 if [ -z "$RESOLVERS" ]; then
     echo "$ME: warn: no nameservers found in /etc/resolv.conf, leaving placeholder in place"
     exit 0
