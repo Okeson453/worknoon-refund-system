@@ -25,6 +25,9 @@ COPY apps/web/nginx.conf /etc/nginx/templates/default.conf.template
 # service's real internal hostname (<service-name>.railway.internal) if it is named differently.
 # A wrong hostname now degrades /api to 502 instead of preventing boot.
 ENV API_INTERNAL_HOST=api.railway.internal
+# Renders the DNS resolver placeholder in the config at container start, after envsubst.
+COPY apps/web/25-render-resolvers.sh /docker-entrypoint.d/25-render-resolvers.sh
+RUN chmod +x /docker-entrypoint.d/25-render-resolvers.sh
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html
 
 EXPOSE 80
