@@ -37,6 +37,7 @@ export function useDashboard(options: UseDashboardOptions): UseDashboardResult {
   const [nonce, setNonce] = useState(0);
   const hasLoaded = useRef(false);
   const inFlight = useRef<AbortController | null>(null);
+  const snapshot = useRef<string>('');
 
   const { decision, page, limit } = options;
 
@@ -51,6 +52,16 @@ export function useDashboard(options: UseDashboardOptions): UseDashboardResult {
           listRefundRequests({ decision: decision === 'ALL' ? undefined : decision, page, limit }, signal),
         ]);
         if (signal.aborted) return;
+        // Background polls: keep the previous render when nothing changed, so the
+        // table and cards don't re-render (and re-animate) on identical data.
+        const nextSnapshot = JSON.stringify([summaryResponse, listResponse]);
+        if (background && nextSnapshot === snapshot.current) {
+          setError(null);
+          setIsLoading(false);
+          setIsRefreshing(false);
+          return;
+        }
+        snapshot.current = nextSnapshot;
         setSummary(summaryResponse);
         setRequests(listResponse.items);
         setPagination(listResponse.pagination);

@@ -64,6 +64,27 @@ body,
   height: 100%;
 }
 
+html {
+  /* Keep the scrollbar gutter stable so opening overlays never shift the layout. */
+  scrollbar-gutter: stable;
+}
+
+/* Smooth cross-fade between the customer and support views where supported. */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   margin: 0;
   font-family: var(--font);
