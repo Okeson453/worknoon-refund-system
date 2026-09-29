@@ -18,7 +18,12 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 RUN npm run build --workspace @worknoon/web
 
 FROM nginx:1.27-alpine AS runtime
-COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+# The nginx image's entrypoint runs envsubst over /etc/nginx/templates/*.template, expanding only
+# variables that exist in the environment, and writes the result to conf.d/default.conf.
+COPY apps/web/nginx.conf /etc/nginx/templates/default.conf.template
+# Defaults to the Railway private-network hostname of a service named "api". Override with the
+# API service's own hostname (<service-name>.railway.internal) if it is named differently.
+ENV API_INTERNAL_HOST=api.railway.internal
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html
 
 EXPOSE 80
