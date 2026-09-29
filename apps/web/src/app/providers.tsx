@@ -1,5 +1,6 @@
 import { Component, createContext, useCallback, useContext, useMemo, useState, type ErrorInfo, type ReactNode } from 'react';
 import { ErrorState } from '../components/common/ErrorState';
+import { useDevSession } from '../dev/SessionContext';
 
 export interface Toast {
   id: number;
@@ -26,6 +27,8 @@ let toastCounter = 0;
 
 function ToastProvider({ children }: { children: ReactNode }): JSX.Element {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  // Null in a production build, so the recording overlay can never affect the shipped bundle.
+  const devSession = useDevSession();
 
   const dismissToast = useCallback((id: number) => {
     setToasts((current) => current.filter((toast) => toast.id !== id));
@@ -37,8 +40,9 @@ function ToastProvider({ children }: { children: ReactNode }): JSX.Element {
       const id = toastCounter;
       setToasts((current) => [...current, { ...toast, id }]);
       window.setTimeout(() => dismissToast(id), 6000);
+      devSession?.record({ tone: toast.tone, title: toast.title, message: toast.message ?? '' });
     },
-    [dismissToast],
+    [dismissToast, devSession],
   );
 
   const value = useMemo(() => ({ toasts, pushToast, dismissToast }), [toasts, pushToast, dismissToast]);

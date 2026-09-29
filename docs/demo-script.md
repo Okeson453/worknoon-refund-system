@@ -17,6 +17,36 @@ screen recording with slight compression.
 
 ---
 
+## Optional: presenter overlay
+
+`npm run dev` mounts a dev-only presenter overlay on top of the app. It never ships: the production
+build resolves stub modules (`src/dev/*Switch.prod.tsx`) and tree-shakes the overlay, its cue data and
+its stylesheet out of the bundle, so reviewers running `docker compose up` see the plain product UI.
+
+What it gives you while recording:
+
+- A verdict chip pinned bottom-right mirroring the last API response, so the decision, amount and
+  reason codes are legible at 1080p instead of being a small badge below the fold.
+- A safety flag when a request is refused before the decision engine runs, which is the beat the
+  prompt-injection segment is about.
+- A mirror of every toast, so "Refund request escalated" is inside the frame rather than cropped off
+  its right edge.
+- A script cue card with the segment, the sentence to say and the click path for the beat.
+
+Keys (ignored while typing in the refund message box):
+
+| Key | Action |
+|---|---|
+| `n` / `p` | next / previous cue |
+| `s` | show or hide the script card |
+| `h` | show or hide the whole overlay |
+| `r` | clear the verdict chip |
+
+The cue cards mirror the segment table below; wording that must be exact is in this file, the overlay
+carries the paraphrase and the click path.
+
+---
+
 ## 0:00 — Start and run the stack
 
 **Say:** "Everything you are about to see comes from a clean clone and one command. No local Node,

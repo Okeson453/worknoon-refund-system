@@ -1,0 +1,288 @@
+/* Presenter overlay chrome. Dev-only: imported behind `import.meta.env.DEV` from main.tsx.
+   Deliberately loud and out of the app's design system — it must never be mistaken for product UI. */
+
+.dev-cue-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  font-family: var(--font-mono, ui-monospace, 'IBM Plex Mono', monospace);
+  color: #f7f7fb;
+}
+
+/* ---------- verdict overlay ---------- */
+
+.dev-verdict {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  min-width: 300px;
+  padding: 18px 22px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  background: rgba(12, 12, 18, 0.955);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  letter-spacing: 0.02em;
+}
+
+.dev-verdict__label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+}
+
+.dev-verdict__decision {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.dev-verdict__meta {
+  margin: 8px 0 0;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.dev-verdict__reasons {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.78;
+}
+
+.dev-verdict--approved {
+  border-color: rgba(86, 214, 138, 0.75);
+}
+.dev-verdict--approved .dev-verdict__decision {
+  color: #56d68a;
+}
+
+.dev-verdict--denied {
+  border-color: rgba(255, 104, 104, 0.75);
+}
+.dev-verdict--denied .dev-verdict__decision {
+  color: #ff6868;
+}
+
+.dev-verdict--escalated {
+  border-color: rgba(255, 190, 80, 0.8);
+}
+.dev-verdict--escalated .dev-verdict__decision {
+  color: #ffbe50;
+}
+
+.dev-verdict--blocked {
+  border-color: rgba(255, 104, 104, 0.75);
+}
+.dev-verdict--blocked .dev-verdict__decision {
+  color: #ff6868;
+  font-size: 26px;
+}
+
+/* ---------- safety flag chip ---------- */
+
+.dev-safety-flag {
+  position: fixed;
+  right: 24px;
+  top: 96px;
+  max-width: 320px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 190, 80, 0.85);
+  background: rgba(28, 20, 4, 0.95);
+  color: #ffd98a;
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+}
+
+.dev-safety-flag__title {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
+
+/* ---------- "shown on camera" toast mirror ---------- */
+
+.dev-toast-mirror {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.dev-toast-mirror__item {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(12, 12, 18, 0.94);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.dev-toast-mirror__title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.dev-toast-mirror__item--success .dev-toast-mirror__title {
+  color: #56d68a;
+}
+.dev-toast-mirror__item--error .dev-toast-mirror__title {
+  color: #ff6868;
+}
+.dev-toast-mirror__item--info .dev-toast-mirror__title {
+  color: #8ab4ff;
+}
+
+/* ---------- live form context ---------- */
+
+.dev-cue__context {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: inherit;
+  font-size: 11.5px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  opacity: 0.9;
+}
+
+/* ---------- script cue card ---------- */
+
+.dev-cue {
+  position: fixed;
+  left: 24px;
+  top: 96px;
+  width: 400px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  pointer-events: auto;
+  padding: 18px 20px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(12, 12, 18, 0.96);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  color: #f7f7fb;
+}
+
+.dev-cue__eyebrow {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+}
+
+.dev-cue__time {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #8ab4ff;
+  letter-spacing: 0.08em;
+}
+
+.dev-cue__title {
+  margin: 8px 0 0;
+  font-size: 19px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.dev-cue__proves {
+  margin: 8px 0 0;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.dev-cue__say {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid rgba(138, 180, 255, 0.8);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.dev-cue__section {
+  margin: 14px 0 0;
+}
+
+.dev-cue__section-title {
+  margin: 0 0 6px;
+  font-size: 11px
+  ;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+}
+
+.dev-cue__list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.dev-cue__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.dev-cue__nav {
+  pointer-events: auto;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.dev-cue__nav button {
+  pointer-events: auto;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  cursor: pointer;
+}
+
+.dev-cue__nav button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.dev-cue__hint {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(12, 12, 18, 0.9);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  opacity: 0.72;
+}

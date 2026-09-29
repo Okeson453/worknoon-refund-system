@@ -20,6 +20,16 @@ container start.
 
 ---
 
+## 1a. Recording aid (dev only)
+
+Bash `npm run dev --workspace @worknoon/web` serves the app on `:5173` with a presenter overlay:
+script cue cards, a large verdict chip mirroring the last API decision, and a safety flag when a
+request is refused before the decision engine runs. See [demo-script.md § Optional](demo-script.md)
+for the keys. It is dev-only by construction — the production build resolves `src/dev/*Switch.prod.tsx`
+stubs and drops the overlay from the bundle, so nothing in this section affects what reviewers run.
+
+---
+
 ## 2. Start the stack
 
 ```bash

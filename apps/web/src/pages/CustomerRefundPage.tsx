@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { PageContainer } from '../components/layout/PageContainer';
 import { CustomerSwitcher } from '../components/refund/CustomerSwitcher';
 import { OrderPicker } from '../components/refund/OrderPicker';
@@ -11,6 +11,7 @@ import { useCustomers } from '../hooks/useCustomers';
 import { useOrders } from '../hooks/useOrders';
 import { useRefund } from '../hooks/useRefund';
 import { useToast } from '../app/providers';
+import { useDevSession } from '../dev/SessionContext';
 import { formatCurrency } from '../utils/formatCurrency';
 import { daysSince } from '../utils/formatDate';
 import { MESSAGE_MAX_LENGTH, MESSAGE_MIN_LENGTH, type ChatEntry } from '../types/refund';
@@ -33,6 +34,7 @@ export function CustomerRefundPage(): JSX.Element {
   const { orders, isLoading: isLoadingOrders, error: ordersError } = useOrders(customerId);
   const { state, result, error, submit, reset } = useRefund();
   const { pushToast } = useToast();
+  const devSession = useDevSession();
 
   const selectedOrder = useMemo(() => orders.find((order) => order.id === orderId) ?? null, [orders, orderId]);
   const items = useMemo(() => selectedOrder?.items ?? [], [selectedOrder]);
@@ -73,6 +75,19 @@ export function CustomerRefundPage(): JSX.Element {
     },
     [reset],
   );
+
+  // Dev-only: publish the current selection so the recording calls out what the policy sees on camera.
+  useEffect(() => {
+    if (devSession === null) return;
+    const lines: string[] = [];
+    lines.push(`customer   ${customerId ?? '—'}`);
+    lines.push(`order      ${orderId ?? '—'}`);
+    lines.push(`items      ${itemIds.length > 0 ? itemIds.join(', ') : '—'}`);
+    lines.push(`message    ${message.trim() === '' ? '—' : `"${message.trim()}"`}`);
+    lines.push(`age        ${selectedOrder === null ? '—' : `${daysSince(selectedOrder.orderDate)} days`}`);
+    lines.push(`amount     ${formatCurrency(selectedTotalCents)}`);
+    devSession.setContext(lines.join('\n'));
+  }, [devSession, customerId, orderId, itemIds, message, selectedOrder, selectedTotalCents]);
 
   const handleReset = useCallback(() => {
     setMessage('');

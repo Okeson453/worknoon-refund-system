@@ -7,6 +7,7 @@ export type {
   RefundRequestDetail,
   RefundRequestListItem,
   RefundRequestListResponse,
+  RefundStatus,
 } from '@worknoon/shared-types';
 
 /** Contract limits mirrored from the API so the UI can validate before sending. */
