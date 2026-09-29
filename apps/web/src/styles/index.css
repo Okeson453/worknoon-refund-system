@@ -39,8 +39,9 @@
   --shadow: 0 12px 30px rgba(2, 6, 18, 0.45);
   --shadow-lg: 0 24px 60px rgba(2, 6, 18, 0.6);
 
-  --font: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --mono: 'JetBrains Mono', 'SFMono-Regular', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  --font: 'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -70,8 +71,8 @@ body {
   line-height: 1.55;
   color: var(--text);
   background:
-    radial-gradient(1200px 600px at 12% -10%, rgba(56, 189, 248, 0.12), transparent 60%),
-    radial-gradient(900px 500px at 92% 0%, rgba(129, 140, 248, 0.12), transparent 55%),
+    radial-gradient(1100px 520px at 10% -12%, rgba(56, 189, 248, 0.07), transparent 55%),
+    radial-gradient(900px 480px at 95% -5%, rgba(129, 140, 248, 0.06), transparent 50%),
     var(--bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -85,6 +86,13 @@ h4 {
   line-height: 1.25;
   font-weight: 650;
   letter-spacing: -0.01em;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.005em;
 }
 
 p {
@@ -173,8 +181,10 @@ ol {
   align-items: center;
   gap: var(--space-3);
   color: var(--text);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
 .brand:hover {
@@ -326,7 +336,7 @@ ol {
 .card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(18, 27, 44, 0.96), rgba(14, 21, 36, 0.96));
+  background: var(--bg-panel);
   box-shadow: var(--shadow-sm);
 }
 
@@ -395,13 +405,13 @@ ol {
 }
 
 .button--primary {
-  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  background: var(--accent-strong);
   border-color: transparent;
   color: #04121f;
 }
 
 .button--primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #55c9fb, #22a7ee);
+  background: var(--accent);
   border-color: transparent;
 }
 
@@ -795,6 +805,7 @@ textarea.form-field__control {
   font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .refund-result__label {
@@ -888,6 +899,7 @@ textarea.form-field__control {
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .summary-card__value--positive {
@@ -977,6 +989,7 @@ textarea.form-field__control {
   text-align: left;
   vertical-align: middle;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .data-table th {
