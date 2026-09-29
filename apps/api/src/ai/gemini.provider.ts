@@ -14,7 +14,7 @@ import { COMPOSITION_JSON_SCHEMA, COMPOSITION_TOOL_NAME, parseComposition } from
 import type { AiProvider, ComposeInput, Composition, Interpretation, InterpretInput } from './ai.types';
 
 export const PROVIDER_NAME = 'gemini';
-export const GEMINI_DEFAULT_MODEL = 'gemini-2.5-flash';
+export const GEMINI_DEFAULT_MODEL = 'gemini-3.8-flash';
 
 /**
  * Gemini provider that speaks Google's OpenAI-compatible chat-completions surface,
